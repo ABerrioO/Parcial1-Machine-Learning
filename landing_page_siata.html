@@ -1,0 +1,297 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SIATA - Sistema de Monitoreo de Calidad del Aire</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 40px 0;
+                text-align: center;
+            }
+            header h1 {
+                margin: 0;
+                font-size: 2.5em;
+            }
+            header p {
+                font-size: 1.2em;
+                margin: 10px 0 0 0;
+            }
+            .section {
+                background: white;
+                margin: 20px 0;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .section h2 {
+                color: #667eea;
+                border-bottom: 3px solid #667eea;
+                padding-bottom: 10px;
+            }
+            .alert-box {
+                padding: 15px;
+                margin: 10px 0;
+                border-radius: 5px;
+                border-left: 5px solid;
+            }
+            .alert-roja {
+                background-color: #ffebee;
+                border-color: #f44336;
+                color: #c62828;
+            }
+            .alert-naranja {
+                background-color: #fff3e0;
+                border-color: #ff9800;
+                color: #e65100;
+            }
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin: 20px 0;
+            }
+            .stat-card {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 20px;
+                border-radius: 8px;
+                text-align: center;
+            }
+            .stat-card h3 {
+                margin: 0;
+                font-size: 2em;
+            }
+            .stat-card p {
+                margin: 5px 0 0 0;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 15px 0;
+            }
+            th, td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            th {
+                background-color: #667eea;
+                color: white;
+            }
+            .btn {
+                display: inline-block;
+                padding: 12px 24px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                margin: 10px 5px;
+                transition: transform 0.3s;
+            }
+            .btn:hover {
+                transform: translateY(-2px);
+            }
+            footer {
+                text-align: center;
+                padding: 20px;
+                background: #333;
+                color: white;
+                margin-top: 40px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>🌍 SIATA - Calidad del Aire</h1>
+            <p>Sistema de Monitoreo de Material Particulado PM2.5 en el Valle de Aburrá</p>
+        </header>
+        
+        <div class="container">
+            <!-- Problema y Contexto -->
+            <div class="section">
+                <h2>📋 Problema y Contexto</h2>
+                <p><strong>Problema:</strong> La contaminación del aire por material particulado PM2.5 representa un riesgo significativo para la salud pública en el Valle de Aburrá. Las personas vulnerables (niños, adultos mayores y personas con enfermedades respiratorias) necesitan información actualizada para tomar decisiones sobre sus actividades diarias.</p>
+                
+                <p><strong>Contexto:</strong> El SIATA (Sistema de Alerta Temprana de Medellín y el Valle de Aburrá) opera una de las redes de monitoreo de calidad del aire más sólidas del país, con 43 puntos de monitoreo entre automáticos y manuales, especialmente para material particulado PM2.5 [[22]].</p>
+                
+                <p><strong>Necesidad:</strong> La Secretaría de Salud Municipal requiere un sistema que permita:</p>
+                <ul>
+                    <li>Consultar información actualizada en tiempo real</li>
+                    <li>Identificar zonas críticas de contaminación</li>
+                    <li>Visualizar geográficamente la distribución del contaminante</li>
+                    <li>Generar alertas tempranas y recomendaciones</li>
+                    <li>Apoyar la toma de decisiones en salud pública</li>
+                </ul>
+            </div>
+            
+            <!-- Datos Utilizados -->
+            <div class="section">
+                <h2>📊 Datos Utilizados</h2>
+                <p><strong>Fuente:</strong> SIATA - Sistema de Alerta Temprana de Medellín y el Valle de Aburrá</p>
+                <p><strong>API:</strong> https://siata.gov.co/EntregaData1/Datos_SIATA_Aire_AQ_pm25_Last.json</p>
+                <p><strong>Variable principal:</strong> Material particulado PM2.5 (µg/m³)</p>
+                <p><strong>Cobertura:</strong> 525 estaciones de monitoreo</p>
+                <p><strong>Actualización:</strong> Datos horarios en tiempo real</p>
+                
+                <h3>Variables disponibles:</h3>
+                <ul>
+                    <li><strong>estacion:</strong> Nombre de la estación de monitoreo</li>
+                    <li><strong>pm25:</strong> Concentración de material particulado PM2.5 (µg/m³)</li>
+                    <li><strong>ica:</strong> Índice de Calidad del Aire calculado</li>
+                    <li><strong>categoria:</strong> Clasificación de la calidad del aire</li>
+                    <li><strong>latitud/longitud:</strong> Coordenadas geográficas</li>
+                    <li><strong>fecha_local:</strong> Fecha y hora de la medición</li>
+                    <li><strong>recomendacion:</strong> Recomendación de salud</li>
+                </ul>
+            </div>
+            
+            <!-- Alertas Actuales -->
+            <div class="section">
+                <h2>🚨 Alertas Actuales</h2>
+                <p><strong>Fecha de consulta:</strong> 2026-09-18 13:01:24</p>
+                
+                <p>✓ No hay alertas rojas activas</p>
+                
+                <div class="alert-box alert-naranja">
+                    <h3>🟠 ALERTA NARANJA - 17 Estaciones</h3>
+                    <p>Calidad del aire Moderada. Se recomienda precaución.</p>
+                </div>
+            </div>
+            
+            <!-- Estadísticas -->
+            <div class="section">
+                <h2>📈 Estadísticas Resumen</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>525</h3>
+                        <p>Estaciones Activas</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>0</h3>
+                        <p>Alertas Rojas</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>17</h3>
+                        <p>Alertas Naranjas</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>19.4</h3>
+                        <p>Promedio PM2.5 (µg/m³)</p>
+                    </div>
+                </div>
+                
+                <h3>Distribución por Categoría:</h3>
+                <table>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Número de Estaciones</th>
+                        <th>Porcentaje</th>
+                    </tr>
+                    <tr><td>Aceptable</td><td>289</td><td>55.0%</td></tr><tr><td>Sin dato</td><td>138</td><td>26.3%</td></tr><tr><td>Buena</td><td>81</td><td>15.4%</td></tr><tr><td>Moderada</td><td>17</td><td>3.2%</td></tr>
+                </table>
+            </div>
+            
+            <!-- Funcionamiento -->
+            <div class="section">
+                <h2>⚙️ Funcionamiento de la Solución</h2>
+                <h3>Flujo de Procesamiento:</h3>
+                <ol>
+                    <li><strong>Consumo de API:</strong> Conexión HTTP a la API de SIATA para obtener datos en tiempo real</li>
+                    <li><strong>Transformación:</strong> Conversión de JSON a DataFrame de pandas</li>
+                    <li><strong>Limpieza:</strong> Manejo de valores nulos y datos inválidos (-9999)</li>
+                    <li><strong>Cálculo del ICA:</strong> Conversión de µg/m³ a Índice de Calidad del Aire usando estándares EPA/SIATA</li>
+                    <li><strong>Clasificación:</strong> Asignación de categorías y colores según rangos ICA</li>
+                    <li><strong>Generación de alertas:</strong> Identificación automática de estaciones críticas</li>
+                    <li><strong>Visualización:</strong> Mapas interactivos con folium y gráficos estadísticos</li>
+                </ol>
+                
+                <h3>Componentes:</h3>
+                <ul>
+                    <li><strong>API Consumer:</strong> requests library para consumo de datos</li>
+                    <li><strong>Data Processing:</strong> pandas y numpy para transformación</li>
+                    <li><strong>Visualización:</strong> matplotlib, seaborn y folium</li>
+                    <li><strong>Interactividad:</strong> Widgets de IPython para filtros</li>
+                    <li><strong>Mapeo:</strong> Folium con MarkerCluster para visualización geográfica</li>
+                </ul>
+            </div>
+            
+            <!-- Utilidad para Toma de Decisiones -->
+            <div class="section">
+                <h2>💡 Utilidad para la Toma de Decisiones</h2>
+                
+                <h3>Para la Secretaría de Salud:</h3>
+                <ul>
+                    <li>Identificación de zonas prioritarias para intervenciones</li>
+                    <li>Emisión de alertas sanitarias preventivas</li>
+                    <li>Planificación de campañas de salud pública</li>
+                    <li>Asignación de recursos a áreas críticas</li>
+                </ul>
+                
+                <h3>Para la Población:</h3>
+                <ul>
+                    <li>Decidir si realizar actividades al aire libre</li>
+                    <li>Proteger a grupos vulnerables (niños, adultos mayores)</li>
+                    <li>Planificar rutas de movilidad evitando zonas contaminadas</li>
+                    <li>Uso preventivo de mascarillas en zonas críticas</li>
+                </ul>
+                
+                <h3>Para Instituciones Educativas:</h3>
+                <ul>
+                    <li>Decidir suspensión de actividades deportivas externas</li>
+                    <li>Implementar protocolos de protección</li>
+                    <li>Informar a padres de familia</li>
+                </ul>
+            </div>
+            
+            <!-- Visualizaciones -->
+            <div class="section">
+                <h2>🗺️ Visualizaciones Disponibles</h2>
+                <p>El sistema incluye las siguientes visualizaciones:</p>
+                <ul>
+                    <li><strong>Mapa Interactivo:</strong> Visualización geográfica de estaciones con códigos de color según ICA (archivo: mapa_calidad_aire_siata.html)</li>
+                    <li><strong>Histogramas:</strong> Distribución de concentraciones PM2.5</li>
+                    <li><strong>Gráficos de barras:</strong> Comparación entre estaciones</li>
+                    <li><strong>Boxplots:</strong> Análisis estadístico de distribución</li>
+                    <li><strong>Tablas dinámicas:</strong> Consultas filtradas por categoría o ubicación</li>
+                </ul>
+                
+                <a href="mapa_calidad_aire_siata.html" class="btn" target="_blank">Ver Mapa Interactivo</a>
+            </div>
+            
+            <!-- Conclusiones -->
+            <div class="section">
+                <h2>✅ Conclusiones</h2>
+                <ul>
+                    <li>El sistema permite monitoreo en tiempo real de la calidad del aire en el Valle de Aburrá</li>
+                    <li>La visualización geográfica facilita la identificación de patrones espaciales de contaminación</li>
+                    <li>Las alertas automáticas permiten respuesta rápida ante episodios críticos</li>
+                    <li>La solución es escalable y puede integrarse con otros sistemas de la Secretaría de Salud</li>
+                    <li>Los datos históricos pueden usarse para análisis predictivos y modelamiento</li>
+                </ul>
+            </div>
+        </div>
+        
+        <footer>
+            <p>SIATA - Sistema de Alerta Temprana de Medellín y el Valle de Aburrá</p>
+            <p>Proyecto de Análisis de Datos - Calidad del Aire PM2.5</p>
+            <p>© 2026</p>
+        </footer>
+    </body>
+    </html>
+    
