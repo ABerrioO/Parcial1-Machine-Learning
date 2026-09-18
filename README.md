@@ -52,6 +52,7 @@ Para desplegar la aplicación de forma gratuita en [Streamlit Community Cloud](h
 3. Haz clic en **"New app"**.
 4. Selecciona tu repositorio de GitHub, la rama (normalmente `main` o `master`) y el archivo principal (`app.py`).
 5. Haz clic en **"Deploy!"**.
+6. Resultado: Página desplegada en streamlit.io: https://parcial1-machine-learning-esx6eg8sf4hhjomcfh3hc2.streamlit.app
 
 ---
 
